@@ -20,31 +20,31 @@
 
 <body class="bg-emerald-500">
     <!-- Header Section -->
-    <header class="container-fluid flex justify-between text-center text-white bg-slate-500">
-        <div><h1 class="text-5xl font-bold"> Weather Dashboard </h1></div>
-        <div><i class="fa-solid fa-money-bill-trend-up fa-xl"></i></div>
+    <header class="container-fluid flex justify-between text-center text-white bg-slate-500 py-4">
+        <div><h1 class="text-5xl font-bold"> STOCK IT & WATCH IT </h1></div>
+        <span style=" color: rgb(17, 186, 17);"><i class="fa-solid fa-money-bill-trend-up fa-3x"></i></span>
         <div class="weather text-2xl"> Weather</div>
-        <button id="theme">Change Theme</button>
+        <button id="theme" type="button" class="btn btn-light btn-sm">Change Theme</button>
     </header>
 
 
     <div class="row ">
         <!-- Finance News Section -->
         <aside class="News col-sm-3 bg-sky-500 min-h-screen">
-            <h3 class="flex justify-center">Finance News</h3>
-            <div class="currentNews">Current Finance News will appear here</div>
+            <h3 class="text-2xl font-bold flex justify-center pt-3">Finance News</h3>
+            <div class="currentNews flex justify-center ">Current Finance News will appear here</div>
         </aside>
 
         <!-- Stock Search and Watch Section -->
         <section class="col">
-            <div id="searchBox" class="">
+            <div id="searchBox" class="pt-3">
                 <form class="flex justify-center">
-                    <input id="stockSearch" type="text" class="form-control" placeholder="Enter Stock Name Here">
-                    <button id="btnSearch" class="btn flex justify-center">Search Stock</button>
+                    <input id="stockSearch" type="text" class="form-control w-72" placeholder="Enter Stock Name Here">
+                    <button id="btnSearch" type="button" class="btn btn-info btn-sm">Search Stock</button>
                 </form>
             </div>
             <!-- StockSearchList -->
-            <div id="watchList"> Stocks show up here</div>
+            <div id="watchList" class="flex justify-center pt-4"> Stocks show up here</div>
         </section>
 
     </div>
