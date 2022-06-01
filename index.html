@@ -9,35 +9,38 @@
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <!-- Font Awesome -->
     <script src="https://kit.fontawesome.com/4a1683ce64.js" crossorigin="anonymous"></script>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+   
     <!-- CSS Style Sheet -->
     <link rel="stylesheet" href="./css/style.css">
     <!-- Title -->
     <title>STOCK IT & WATCH IT</title>
 </head>
 
-<body>
+<body class="bg-emerald-500">
     <!-- Header Section -->
-    <header>
-        <h1>Weather Dashboard</h1>
-        <i class="fa-solid fa-money-bill-trend-up fa-xl"></i>
-        <div class="weather"> Weather</div>
+    <header class="container-fluid flex justify-between text-center text-white bg-slate-500">
+        <div><h1 class="text-5xl font-bold"> Weather Dashboard </h1></div>
+        <div><i class="fa-solid fa-money-bill-trend-up fa-xl"></i></div>
+        <div class="weather text-2xl"> Weather</div>
         <button id="theme">Change Theme</button>
     </header>
 
 
-    <div class="">
+    <div class="row ">
         <!-- Finance News Section -->
-        <aside class="News">
-            <h3>Finance News</h3>
+        <aside class="News col-sm-3 bg-sky-500 min-h-screen">
+            <h3 class="flex justify-center">Finance News</h3>
             <div class="currentNews">Current Finance News will appear here</div>
         </aside>
 
         <!-- Stock Search and Watch Section -->
-        <section>
+        <section class="col">
             <div id="searchBox" class="">
-                <form>
+                <form class="flex justify-center">
                     <input id="stockSearch" type="text" class="form-control" placeholder="Enter Stock Name Here">
-                    <button id="btnSearch" class="btn">Search Stock Here</button>
+                    <button id="btnSearch" class="btn flex justify-center">Search Stock</button>
                 </form>
             </div>
             <!-- StockSearchList -->
