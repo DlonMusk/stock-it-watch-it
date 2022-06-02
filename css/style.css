@@ -1,11 +1,90 @@
 /* _____________________________________________________________________________________________________________________________________________ */
 /* TONY's CODES (DONT FUCK WITH THIS) */
 .currentNews {
+    margin-top: 10px;
+    margin-left: 0px;
     display: flex;
+    flex: 1 0 auto;
     flex-wrap: wrap;
     overflow-y: scroll;
-    max-height: 600px;
+    max-height: 700px;
+    min-width: 300px;
+    border: 3px solid rgb(100 116 139);
+    background-color: rgb(100 116 139);
+    justify-content: center;
+    align-items: center;
+    text-align: left;
+    width: 100%;
 }
 
+.News {
+    min-width: 330px;
+    padding: 0;
+}
 
+.imagePreview {
+    /* border: 3px solid black; */
+    justify-content: center;
+    width: 90%;
+    margin: 3px auto;
+}
+
+.newsImage {
+    width: 100%;
+    height: 100%;
+    margin: 3px auto;
+}
+
+.titlesearch {
+    width: 90%;
+    margin: 3px auto;
+    font-weight: bolder;
+}
+
+.textsearch {
+  width: 90%;
+  margin: 3px auto;
+  font-size: 15px;
+  color: rgb(100, 100, 100) !important;
+}
+
+.sentiment {
+  width: 90%;
+  margin: 3px auto;
+}
+
+.sentOrange {
+  color: orange !important;
+  font-weight: bolder;
+}
+
+.sentRed {
+  color: red !important;
+  font-weight: bolder;
+}
+
+.sentGreen {
+  color: green !important;
+  font-weight: bolder;
+}
+
+/* width */
+::-webkit-scrollbar {
+    width: 10px;
+  }
+  
+  /* Track */
+  ::-webkit-scrollbar-track {
+    background: #f1f1f1;
+  }
+  
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: #888;
+  }
+  
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background: #555;
+  }
 /* ____________________________________________________________________________________________________________________________________________  */
