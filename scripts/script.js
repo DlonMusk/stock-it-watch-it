@@ -1,4 +1,58 @@
+// Global Variables
+let query = "";
+let regEx = new RegExp('[a-zA-Z]');
 
+let stockSearchEl = $('#stockSearch');
+
+let url = 'https://yfapi.net/v6/finance/autocomplete/?lang=en&query=A';
+
+const options = {
+  method: 'GET',
+  headers: {
+    'x-api-key': '8zF1gtbfEHaIOQPxuiS6c8qefNIML8YL7kx2wXnF'
+  }
+};
+
+//_____________________________________________________________________________________________________________________________________________
+// DYLAN's CODES (YOU CAN FUCK WITH THIS)
+
+// auto complete function for search
+const autoCompleteSearch = (event) => {
+  let availableTags = [];
+  if (regEx.test(event.originalEvent.key) && event.originalEvent.key != 'Backspace') {
+    
+      query += event.originalEvent.key;
+  }else if(event.originalEvent.key == 'Backspace' || event.originalEvent.key == 'Delete'){
+      let newStringArr = query.split('');
+      newStringArr.pop();
+      query = newStringArr.join('');
+  }
+  console.log(query);
+
+  url = `https://yfapi.net/v6/finance/autocomplete/?lang=en&query=${query}`
+
+  fetch(url, options).then(function (response) {
+    return response.json();
+  }).then(function (data) {
+    console.log(data.ResultSet.Result);
+    for (let i = 0; i < data.ResultSet.Result.length; i++) {
+      console.log(data.ResultSet.Result[i].name);
+      let newSelectName = data.ResultSet.Result[i].name;
+      let newSelectTicker = data.ResultSet.Result[i].symbol;
+      if(availableTags.length < 6){
+        availableTags.push(`${newSelectTicker}: ${newSelectName}`)
+      }
+    }
+    console.log(availableTags);
+  }).then(function() {
+    $( "#stockSearch" ).autocomplete({
+      source: availableTags
+    });
+  });
+}
+
+
+//_____________________________________________________________________________________________________________________________________________
 
 //_____________________________________________________________________________________________________________________________________________
 // TONY's CODES (DONT FUCK WITH THIS)
@@ -36,3 +90,5 @@ GRABNEWS();
 
 //____________________________________________________________________________________________________________________________________________ 
 
+// event listeners
+stockSearchEl.on('keyup', autoCompleteSearch);
