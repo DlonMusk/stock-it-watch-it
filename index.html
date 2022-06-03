@@ -7,6 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <link href="https://fonts.googleapis.com/css2?family=Indie+Flower&family=Kdam+Thmor+Pro&family=Quicksand:wght@300&display=swap" rel="stylesheet">
     <!-- Font Awesome -->
     <script src="https://kit.fontawesome.com/4a1683ce64.js" crossorigin="anonymous"></script>
     <!-- Tailwind CSS -->
@@ -21,13 +22,12 @@
 <body class="bg-emerald-500">
     <!-- Header Section -->
     <header class="container-fluid flex justify-between text-center text-white bg-slate-500 py-4">
-        <div><h1 class="text-5xl font-bold"> STOCK IT & <br> WATCH IT </h1></div>
-        <span style=" color: rgb(17, 186, 17);"><i class="fa-solid fa-money-bill-trend-up fa-3x"></i></span>
-        <div class="weather text-xl"></div>
-
-
-
-        <button id="theme" type="button" class="btn btn-light btn-sm">Change Theme</button>
+        <div class="col-4"><h1 class="text-5xl font-bold"> STOCK IT & <br> WATCH IT </h1></div>
+        <span class="col-4" style=" color: rgb(17, 186, 17);"><i class="fa-solid fa-money-bill-trend-up fa-3x"></i></span>
+        <div class="col-4 row flex justify-center">
+            <div class="col-6 weather text-xl"></div>
+            <button id="theme" type="button" class="btn btn-light btn-sm col-6">Change Theme</button>
+        </div>
     </header>
 
 
