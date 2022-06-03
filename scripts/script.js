@@ -1,7 +1,7 @@
 // Global Variables
 let query = "";
 let regEx = new RegExp('[a-zA-Z]');
-
+let themecount = 0;
 let stockSearchEl = $('#stockSearch');
 let searchBtnEl = $('#btnSearch');
 let modalEl = $('.modal');
@@ -209,6 +209,23 @@ function GRABNEWS() {
     })
 };
 GRABNEWS();
+
+
+function CHANGETHEME() {
+  themecount++;
+  if (themecount % 2 !== 0) {
+    document.documentElement.style.setProperty('--slate', '#b49fcc');
+    document.documentElement.style.setProperty('--skyblue', '#ead7d7');
+    document.documentElement.style.setProperty('--emerald', '#6d466b');
+  } else {
+    document.documentElement.style.setProperty('--slate', 'rgb(100 116 139)');
+    document.documentElement.style.setProperty('--skyblue', 'rgb(14 165 233)');
+    document.documentElement.style.setProperty('--emerald', 'rgb(16 185 129)'); 
+  }
+
+}
+
+$('#theme').on("click", CHANGETHEME)
 //____________________________________________________________________________________________________________________________________________ 
 
 

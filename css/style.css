@@ -96,6 +96,19 @@
   border-radius: 10px;
 }
 
+.bg-emerald-500 {
+  background-color: var(--emerald) !important;
+}
+
+.bg-slate-500 {
+  background-color: var(--slate) !important;
+}
+
+
+.bg-sky-500 {
+  background-color: var(--skyblue) !important;
+}
+
 
 /* width */
 ::-webkit-scrollbar {
