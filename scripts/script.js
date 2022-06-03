@@ -4,6 +4,8 @@ let regEx = new RegExp('[a-zA-Z]');
 
 let stockSearchEl = $('#stockSearch');
 let searchBtnEl = $('#btnSearch');
+let newWatchlistBtnEl = $('.new-watchlist');
+let watchListsEl = $('#watchlists');
 let modalEl = $('.modal');
 
 
@@ -21,18 +23,25 @@ const options = {
 
 let createModal = () => {
   let symbol = stockSearchEl.val().split(':');
-  
+
   symbol = symbol[0];
   console.log(symbol);
   let url = `https://yfapi.net/v6/finance/quote?region=US&lang=en&symbols=${symbol}`
   fetch(url, options).then(function (response) {
     return response.json();
   }).then(function (data) {
-    data = data.quoteResponse.result[0];
-
     modalEl.empty();
     modalEl.append($('<p>').text(`Current Price: ${data.bid}`));
     modalEl.append($('<p>').text(`Day Range: ${data.regularMarketDayRange}`));
+
+    let watchlistName = "";
+
+    // select the watchlist you want to add too, if only 1 then add to that
+    if (watchListsEl.children().length == 0) {
+      createNewWatchlist();
+      return;
+    }
+
 
     $(function () {
       modalEl.dialog({
@@ -44,15 +53,60 @@ let createModal = () => {
         modal: true,
         buttons: {
           "Add": function () {
-            $('#watchList').append(
-              `<div class="card" style="width: 18rem;">
-                        <div class="card-header">${data.displayName}</div>
-                        <div class="card-body">
-                            <h6 class="card-subtitle mb-2 text-muted">${data.symbol}</h6>
-                            <p class="card-text">Current Price: ${data.bid}</p>
-                            <p class="card-text">Day Range: ${data.regularMarketDayRange}</p>
-                        </div>
-                    </div>`)
+            // create new modal to select the watchlist
+            console.log(watchListsEl.children().length)
+            if (watchListsEl.children().length == 1) {
+              watchlistName = watchListsEl.children()[0].dataset.name
+            }
+
+            if (watchListsEl.children().length > 1) {
+              modalEl.empty();
+              // create buttons object with children
+              let buttons = {};
+              for (let i = 0; i < watchListsEl.children().length; i++) {
+                buttons[`${watchListsEl.children()[i].dataset.name}`] = function () {
+                  watchlistName = watchListsEl.children()[i].dataset.name;
+
+                  // REFACTOR
+                  $(`.${watchlistName}-watchlist`).append(
+                    `<div class="card col-3 mx-3" style="width: 18rem;">
+                                  <div class="card-header">${data.displayName}</div>
+                                  <div class="card-body">
+                                      <h6 class="card-subtitle mb-2 text-muted">${data.symbol}</h6>
+                                      <p class="card-text">Current Price: ${data.bid}</p>
+                                      <p class="card-text">Day Range: ${data.regularMarketDayRange}</p>
+                                  </div>
+                              </div>`);
+                  $(this).dialog('close');
+                }
+              }
+              console.log(buttons);
+              $(function () {
+                modalEl.dialog({
+                  title: 'Choose Your Watchlist',
+                  resizable: false,
+                  height: "auto",
+                  width: 400,
+                  modal: true,
+                  buttons: buttons
+                });
+              });
+              console.log(watchlistName)
+
+
+            }
+
+
+            // REFACTOR
+            $(`.${watchlistName}-watchlist`).append(
+              `<div class="card col-3 mx-3" style="width: 18rem;">
+                      <div class="card-header">${data.displayName}</div>
+                      <div class="card-body">
+                          <h6 class="card-subtitle mb-2 text-muted">${data.symbol}</h6>
+                          <p class="card-text">Current Price: ${data.bid}</p>
+                          <p class="card-text">Day Range: ${data.regularMarketDayRange}</p>
+                      </div>
+                  </div>`)
             $(this).dialog("close");
           },
           Cancel: function () {
@@ -61,10 +115,76 @@ let createModal = () => {
         }
       });
     })
+
   })
 
 
 }
+
+let deleteWatchList = (event) => {
+  console.log(event);
+}
+
+// DO NOT ALLOW MORE THAN 5 WATCHLISTS
+let createNewWatchlist = () => {
+  modalEl.empty();
+  modalEl.append(`<input type='text' class='get-name'>`);
+  let title = 'New WatchList';
+
+
+  // if no watchlists
+  if (watchListsEl.children().length == 0) {
+    title = 'First Create A WatchList';
+    console.log(title);
+
+  }
+
+  if (watchListsEl.children().length !== 0) {
+    console.log("HERE " + watchListsEl.children()[0].dataset)
+  }
+
+
+  $(function () {
+    modalEl.dialog({
+      dialogClass: 'no-close',
+      title: title,
+      resizable: false,
+      height: "auto",
+      width: 'auto',
+      modal: true,
+      buttons: {
+        "Add": function () {
+          let name = $('.get-name').val();
+          if (name == "") { $(this).dialog('close'); $('.get-name').text(""); return }
+          console.log(name);
+          let newWatchListEl = $('<div>').attr(`data-name`, name).addClass('watchlist').append(`
+                      <button class="btn btn-primary col-12" type="button" data-bs-toggle="collapse"
+                      data-bs-target="#collapse${name}" aria-expanded="false" aria-controls="collapseExample">
+                      Show ${name} WatchList
+                      </button>
+                      <div class="collapse" id="collapse${name}">
+                          <div class="row card-body ${name}-watchlist">
+
+                          </div>
+                          <button class="btn btn-danger col-12 delete-${name}">Delete Watchlist</button>
+                      </div>
+                  `);
+          console.log(newWatchListEl);
+          watchListsEl.append(newWatchListEl);
+          $(`delete-${name}`).on('click', deleteWatchList)
+          //localStorage.setItem('watchlists', JSON.stringify(watchListsEl))  
+          $(this).dialog("close");
+        },
+        Cancel: function () {
+          $(this).dialog("close");
+        }
+      }
+    });
+  })
+
+}
+
+
 
 // auto complete function for search
 const autoCompleteSearch = (event) => {
@@ -99,6 +219,13 @@ const autoCompleteSearch = (event) => {
     });
   });
 }
+
+
+// Event Listeners
+
+newWatchlistBtnEl.on('click', createNewWatchlist);
+stockSearchEl.on('keyup', autoCompleteSearch);
+searchBtnEl.on('click', createModal);
 
 
 //_____________________________________________________________________________________________________________________________________________
@@ -154,7 +281,6 @@ GRABNEWS();
 //____________________________________________________________________________________________________________________________________________ 
 
 
-// event listeners
-stockSearchEl.on('keyup', autoCompleteSearch);
-searchBtnEl.on('click', createModal);
+
+
 
