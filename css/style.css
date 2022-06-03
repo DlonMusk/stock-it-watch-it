@@ -100,14 +100,12 @@ body, div, header, section, aside {
   border-radius: 10px;
 }
 
-#theme {
-  max-height: 50px;
-}
 
-/* button {
+#theme, #btnSearch {
   background-color: white !important;
   max-width: 150px !important;
-} */
+  max-height: 50px;
+}
 
 
 .bg-emerald-500 {
