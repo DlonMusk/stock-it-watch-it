@@ -53,6 +53,64 @@ const autoCompleteSearch = (event) => {
 
 
 //_____________________________________________________________________________________________________________________________________________
+// ALTHEA'S CODE (NERVOUS)
+
+// Use Fetch API to GET data from OpenWeather API
+function getWeatherData() {
+  let coordinates = "";
+  const APIKEY = '8cd7970543abb6bc1241aa086789ff58'; 
+
+  // to be able to get the current browser location
+if (navigator.geolocation) {
+  navigator.geolocation.getCurrentPosition((position) => {
+  	 coordinates = `lat=${position.coords.latitude}&lon=${position.coords.longitude}`;
+     console.log(typeof coordinates);
+
+     let URL = `https://api.openweathermap.org/data/2.5/onecall?${coordinates}&units=metric&appid=${APIKEY}`;
+     let nameURL = `http://api.openweathermap.org/geo/1.0/reverse?${coordinates}&appid=${APIKEY}`;
+
+
+     fetch(URL).then(function(response){
+      return response.json()
+    }).then(function(data){
+      fetch(nameURL).then(function(response){
+        return response.json()
+      }).then(function(info){
+        console.log(data);
+        console.log(info);
+        renderData(data.current, info[0].name);
+      })
+    })
+  })
+} else {
+	console.log('unable to retrieve location from browser')
+}}
+getWeatherData();
+
+
+
+// Get data info to post on the frontend
+let renderData = (weather, cityName) => {
+ console.log(weather, cityName);
+//  These items exist
+const myWeather = document.getElementsByClassName('weather')[0];
+
+// These items do not exist yet
+ const currentLocation = document.createElement("div");
+  currentLocation.innerHTML = cityName;
+ const currentTemp = document.createElement("div");
+ console.log(weather);
+  currentTemp.innerHTML = Math.round(weather.temp) + "°C";
+ 
+ const foreCast = document.createElement("div");
+ foreCast.innerHTML = (weather.weather[0].description);
+
+//  These will make my items exist
+currentLocation.appendChild(foreCast);
+ currentLocation.appendChild(currentTemp);
+ myWeather.appendChild(currentLocation);
+}
+
 
 
 
