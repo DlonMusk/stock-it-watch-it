@@ -91,7 +91,7 @@ function GRABNEWS() {
               `<div class="newscard mt-3">
 
                <div target="_blank" href="${newsURL}" class="imagePreview"><img src="${imageURL}" class="newsImage"></div>
-               <div class="titlesearch lead"><a target="_blank" href="${newsURL}">${newsTitle}</a> <hr></div>
+               <div class="titlesearch lead"><a class="link" href="${newsURL}">${newsTitle}</a> <hr></div>
                <div class="textsearch"> ${newsSource} | ${newsDate} </div>
                <div class="sentiment"> 
                 <div class="${sentColor}">${newsSent}</div>

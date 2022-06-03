@@ -1,5 +1,12 @@
 /* _____________________________________________________________________________________________________________________________________________ */
 /* TONY's CODES (DONT FUCK WITH THIS) */
+:root {
+  --skyblue: rgb(14 165 233);
+  --emerald: rgb(16 185 129);
+  --slate: rgb(100 116 139);
+}
+
+
 .currentNews {
     margin-top: 10px;
     margin-left: 0px;
@@ -9,8 +16,8 @@
     overflow-y: scroll;
     max-height: 700px;
     min-width: 300px;
-    border: 3px solid rgb(100 116 139);
-    background-color: rgb(100 116 139);
+    border: 3px solid var(--slate);
+    background-color: var(--slate);
     justify-content: center;
     align-items: center;
     text-align: left;
@@ -39,34 +46,56 @@
     width: 90%;
     margin: 3px auto;
     font-weight: bolder;
+    color: var(--emerald);
 }
+
+
+.link:hover { color: var(--skyblue); }
 
 .textsearch {
   width: 90%;
   margin: 3px auto;
   font-size: 15px;
-  color: rgb(100, 100, 100) !important;
+  color: white !important;
 }
 
 .sentiment {
   width: 90%;
   margin: 3px auto;
+  text-align: left;
+  align-items: left;
 }
 
 .sentOrange {
-  color: orange !important;
+  color: white;
+  width:fit-content;
+  align-self: left;
+  background-color: orange !important;
   font-weight: bolder;
+  border: 3px solid orange ;
+  border-radius: 10px;
 }
 
 .sentRed {
-  color: red !important;
+  color: white;
+  width:fit-content;
+  align-self: left;
+  background-color: red !important;
   font-weight: bolder;
+  border: 3px solid red ;
+  border-radius: 10px;
 }
 
 .sentGreen {
-  color: green !important;
+  color: white;
+  width:fit-content;
+  align-self: left;
+  background-color: lightgreen !important;
   font-weight: bolder;
+  border: 3px solid lightgreen ;
+  border-radius: 10px;
 }
+
 
 /* width */
 ::-webkit-scrollbar {
@@ -75,12 +104,12 @@
   
   /* Track */
   ::-webkit-scrollbar-track {
-    background: #f1f1f1;
+    background: rgb(100 116 139);
   }
   
   /* Handle */
   ::-webkit-scrollbar-thumb {
-    background: #888;
+    background: white;
   }
   
   /* Handle on hover */
