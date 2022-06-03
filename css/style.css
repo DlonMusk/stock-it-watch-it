@@ -100,11 +100,13 @@ body, div, header, section, aside {
   border-radius: 10px;
 }
 
+
 #theme, #btnSearch {
   background-color: white !important;
   max-width: 150px !important;
   max-height: 50px;
 }
+
 
 .bg-emerald-500 {
   background-color: var(--emerald) !important;
@@ -139,3 +141,5 @@ body, div, header, section, aside {
     background: #555;
   }
 /* ____________________________________________________________________________________________________________________________________________  */
+
+/* DYLANS CSS */

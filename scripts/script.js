@@ -21,15 +21,18 @@ const options = {
 //_____________________________________________________________________________________________________________________________________________
 // DYLAN's CODES (YOU CAN FUCK WITH THIS)
 
-let createModal = () => {
+let createModal = (event) => {
+  event.preventDefault();
   let symbol = stockSearchEl.val().split(':');
 
-  symbol = symbol[0];
+  symbol = symbol[0].trim();
   console.log(symbol);
   let url = `https://yfapi.net/v6/finance/quote?region=US&lang=en&symbols=${symbol}`
   fetch(url, options).then(function (response) {
     return response.json();
   }).then(function (data) {
+    data = data.quoteResponse.result[0];
+
     modalEl.empty();
     modalEl.append($('<p>').text(`Current Price: ${data.bid}`));
     modalEl.append($('<p>').text(`Day Range: ${data.regularMarketDayRange}`));
@@ -99,7 +102,7 @@ let createModal = () => {
 
             // REFACTOR
             $(`.${watchlistName}-watchlist`).append(
-              `<div class="card col-3 mx-3" style="width: 18rem;">
+              `<div class="card col-3 m-3" style="width: 18rem;">
                       <div class="card-header">${data.displayName}</div>
                       <div class="card-body">
                           <h6 class="card-subtitle mb-2 text-muted">${data.symbol}</h6>
