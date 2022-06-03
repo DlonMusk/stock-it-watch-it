@@ -3,6 +3,7 @@
 ## Table of Contents
 - [Description](#description)
 - [Expectations](#expectations)
+- [Technologies Used](#technologies-used)
 - [References](#references)
 - [Deployed Site Link](#deployed-site)
 
@@ -22,38 +23,18 @@
 - WHEN you click on the change theme button
     - THEN you are presented with a new colour scheme each time
 
+## Technologies Used
+- HTML/Javascript
+- Server-Side APIs Used:
+    - Yahoo Finance API 
+    - Stock News API 
+    - Open Weather
+- Third-Party APIs Used
+    - Tailwindcss
+    - Bootstrap
+
 ## References
 ![Demo Site](./assets/Images/)
 
 ## Deployed Site Link/ Github Pages
  https://dlonmusk.github.io/stock-it-watch-it/
-
-
-
-
-
-
-
-
-
-
-
-Use a CSS framework other than Bootstrap.
-
-* Be deployed to GitHub Pages.
-
-* Be interactive (i.e., accept and respond to user input).
-
-* Use at least two [server-side APIs](https://coding-boot-camp.github.io/full-stack/apis/api-resources).
-
-* Does not use alerts, confirms, or prompts (use modals).
-
-* Use client-side storage to store persistent data.
-
-* Be responsive.
-
-* Have a polished UI.
-
-* Have a clean repository that meets quality coding standards (file structure, naming conventions, follows best practices for class/id naming conventions, indentation, quality comments, etc.).
-
-* Have a quality README (with unique name, description, technologies used, screenshot, and link to deployed application).
