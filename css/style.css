@@ -1,11 +1,15 @@
 /* _____________________________________________________________________________________________________________________________________________ */
 /* TONY's CODES (DONT FUCK WITH THIS) */
+
 :root {
   --skyblue: rgb(14 165 233);
   --emerald: rgb(16 185 129);
   --slate: rgb(100 116 139);
 }
 
+body, div, header, section, aside {
+  transition: 2s;
+}
 
 .currentNews {
     margin-top: 10px;
@@ -96,6 +100,16 @@
   border-radius: 10px;
 }
 
+#theme {
+  max-height: 50px;
+}
+
+button {
+  background-color: white !important;
+  max-width: 150px !important;
+}
+
+
 .bg-emerald-500 {
   background-color: var(--emerald) !important;
 }
@@ -109,7 +123,6 @@
   background-color: var(--skyblue) !important;
 }
 
-
 /* width */
 ::-webkit-scrollbar {
     width: 10px;
@@ -117,7 +130,7 @@
   
   /* Track */
   ::-webkit-scrollbar-track {
-    background: rgb(100 116 139);
+    background: var(--slate);
   }
   
   /* Handle */

@@ -209,20 +209,27 @@ function GRABNEWS() {
     })
 };
 GRABNEWS();
-
+$('body').css('font-family', 'Quicksand');
 
 function CHANGETHEME() {
   themecount++;
-  if (themecount % 2 !== 0) {
+  if (themecount == 1) {
     document.documentElement.style.setProperty('--slate', '#b49fcc');
     document.documentElement.style.setProperty('--skyblue', '#ead7d7');
     document.documentElement.style.setProperty('--emerald', '#6d466b');
-  } else {
+    $('body').css('font-family', 'Kdam Thmor Pro');
+  } else if (themecount == 2) {
     document.documentElement.style.setProperty('--slate', 'rgb(100 116 139)');
     document.documentElement.style.setProperty('--skyblue', 'rgb(14 165 233)');
     document.documentElement.style.setProperty('--emerald', 'rgb(16 185 129)'); 
+    $('body').css('font-family', 'Quicksand');
+  } else if (themecount == 3) {
+    themecount = 0;
+    document.documentElement.style.setProperty('--slate', '#ef7674');
+    document.documentElement.style.setProperty('--skyblue', '#EC5766');
+    document.documentElement.style.setProperty('--emerald', '#DA344D'); 
+    $('body').css('font-family', 'Indie Flower');
   }
-
 }
 
 $('#theme').on("click", CHANGETHEME)
