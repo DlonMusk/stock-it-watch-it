@@ -31,7 +31,7 @@
     </header>
 
 
-    <div class="row ">
+    <div class="row col-12 m-0">
         <!-- Finance News Section -->
         <aside class="News col-sm-3 bg-sky-500 min-h-screen">
             <h3 class="text-2xl font-bold flex justify-center pt-3">Finance News</h3>
@@ -39,18 +39,20 @@
         </aside>
 
         <!-- Stock Search and Watch Section -->
-        <section class="col">
+        <section class="col-9">
             <div id="searchBox" class="pt-3">
                 <form class="flex justify-center">
                     <input id="stockSearch" type="text" class="form-control w-72" placeholder="Enter Stock Name Here">
                     <button id="btnSearch" type="button" class="btn btn-info btn-sm">Search Stock</button>
                 </form>
-                <button class="new-watchlist">NEW WATCHLIST</button>
+                <button class="new-watchlist"><p>NEW WATCHLIST</p></button>
             </div>
             
             <!-- StockSearchList -->
-            <div class="modal"></div>
-            <div id="watchlists" class="row flex justify-center pt-4"></div>
+            
+            <div id="watchlists" class="row pt-4">
+                <div class="modal"></div>
+            </div>
         </section>
 
     </div>
