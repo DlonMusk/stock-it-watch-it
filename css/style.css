@@ -143,3 +143,106 @@ body, div, header, section, aside {
 /* ____________________________________________________________________________________________________________________________________________  */
 
 /* DYLANS CSS */
+
+
+.new-watchlist {
+    margin: 10px auto;
+    padding: 10px;
+    display: flex;
+    justify-content: center;
+    width: 15vw;
+    background-color: rgba(255, 255, 255, 0.25);
+    border: 2px solid var(--slate);
+    border-radius: 20px;
+    font-weight: 900;
+}
+
+.modal {
+    font-size: 20px;
+    text-align: center;
+}
+
+.card{
+    background-color: var(--skyblue);
+    margin: 0;
+    padding: 0;
+}
+
+.card-header{
+    background-color: rgba(255, 255, 255, 0.554);
+    border-radius: 20px 20px 0 0;
+}
+
+.card-body{
+    justify-content: space-between;
+    
+}
+
+.remove-stock-btn{
+    background-color: red;
+}
+
+.get-name{
+    border: 1px var(--slate) solid;
+    border-radius: 10px;
+}
+
+.inner-watchlist{
+    background-color: rgba(255, 255, 255, 0.2);
+    border-radius: 0px 0px 20px 20px;
+}
+
+.watchlist-btn{
+    background-color: var(--skyblue);
+}
+
+.watchlist-btn:hover, .watchlist-btn:focus{
+    background-color: var(--skyblue)
+}
+
+.ui-dialog{
+    border-radius: 30px;
+    background-color: var(--slate);
+    margin: 0 auto;
+    float: none;
+}
+
+.ui-dialog-titlebar {
+    border-radius: 30px 30px 0 0;
+    
+}
+
+.ui-dialog-title {
+    font-size: 20px;
+    color: white;
+    
+}
+
+.ui-dialog .ui-dialog-title{
+    float: none;
+}
+
+.ui-dialog-buttonpane{
+    border-radius: 10px 10px 30px 30px;
+    border: none;
+    background-color: rgba(255, 255, 255, 0.25);
+}
+
+.ui-dialog-buttonset{
+    width: 90%;
+    display: flex;
+    justify-content: space-around;
+    font-size: 20px;
+    color: white;
+    
+}
+
+.ui-widget-header{
+    background-color: rgba(255, 255, 255, 0.25);
+    text-align: center;
+    border: none;
+}
+
+
+
+

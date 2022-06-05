@@ -9,6 +9,7 @@ let watchListsEl = $('#watchlists');
 let modalEl = $('.modal');
 
 
+// api call variables
 let url = 'https://yfapi.net/v6/finance/quote?region=US&lang=en&symbols=AAPL';
 
 const options = {
@@ -19,35 +20,40 @@ const options = {
 };
 
 //_____________________________________________________________________________________________________________________________________________
-// DYLAN's CODES (YOU CAN FUCK WITH THIS)
+// DYLAN's CODE
 
+// function to create modal to add searched stock
 let createModal = (event) => {
   event.preventDefault();
+  //code for autocomplete
   let symbol = stockSearchEl.val().split(':');
-
   symbol = symbol[0].trim();
-  console.log(symbol);
-  let url = `https://yfapi.net/v6/finance/quote?region=US&lang=en&symbols=${symbol}`
+
+  // complete url
+  let url = `https://yfapi.net/v6/finance/quote?region=US&lang=en&symbols=${symbol}`;
+
   fetch(url, options).then(function (response) {
     return response.json();
   }).then(function (data) {
     data = data.quoteResponse.result[0];
 
+    // empty modal and show stock data
     modalEl.empty();
     modalEl.append($('<p>').text(`Current Price: ${data.bid}`));
     modalEl.append($('<p>').text(`Day Range: ${data.regularMarketDayRange}`));
 
     let watchlistName = "";
 
-    // select the watchlist you want to add too, if only 1 then add to that
+    // select the watchlist you want to add too, if only 1 then add to that if none prompt the user to create one
     if (watchListsEl.children().length == 0) {
       createNewWatchlist();
       return;
     }
 
-
+    // if more than one watchlist create modal to let user select watchlist
     $(function () {
       modalEl.dialog({
+        position: { my: 'center', at: 'top+80px', of: $('#watchlists') },
         dialogClass: 'no-close',
         title: data.displayName,
         resizable: false,
@@ -56,36 +62,41 @@ let createModal = (event) => {
         modal: true,
         buttons: {
           "Add": function () {
-            // create new modal to select the watchlist
-            console.log(watchListsEl.children().length)
+            // create new modal to select the watchlist, if only 1 do not prompt and put stock in current watchlist
             if (watchListsEl.children().length == 1) {
               watchlistName = watchListsEl.children()[0].dataset.name
             }
 
-            if (watchListsEl.children().length > 1) {
+            else if (watchListsEl.children().length > 1) {
               modalEl.empty();
               // create buttons object with children
               let buttons = {};
+              // create buttons for modal and add functions to add stock data to selected watchlist
               for (let i = 0; i < watchListsEl.children().length; i++) {
                 buttons[`${watchListsEl.children()[i].dataset.name}`] = function () {
                   watchlistName = watchListsEl.children()[i].dataset.name;
 
-                  // REFACTOR
+
                   $(`.${watchlistName}-watchlist`).append(
-                    `<div class="card col-3 mx-3" style="width: 18rem;">
+                    `<div class="card col-3 m-3" style="width: 18rem;">
                                   <div class="card-header">${data.displayName}</div>
                                   <div class="card-body">
                                       <h6 class="card-subtitle mb-2 text-muted">${data.symbol}</h6>
-                                      <p class="card-text">Current Price: ${data.bid}</p>
+                                      <p class="card-text">Current Price: ${data.bid}$</p>
                                       <p class="card-text">Day Range: ${data.regularMarketDayRange}</p>
+                                      <p class="card-text">Day Change: ${data.regularMarketChangePercent}%</p>
                                   </div>
+                                  <button class="btn btn-danger remove-stock-btn">remove</button>
                               </div>`);
+                  $('.remove-stock-btn').on('click', removeStock);
+                  savePortfolio();
                   $(this).dialog('close');
                 }
               }
-              console.log(buttons);
+
               $(function () {
                 modalEl.dialog({
+                  position: { my: 'center', at: 'top+80px', of: $('#watchlists') },
                   title: 'Choose Your Watchlist',
                   resizable: false,
                   height: "auto",
@@ -94,22 +105,25 @@ let createModal = (event) => {
                   buttons: buttons
                 });
               });
-              console.log(watchlistName)
-
-
             }
 
 
-            // REFACTOR
+            // add to watchlist if only 1
             $(`.${watchlistName}-watchlist`).append(
               `<div class="card col-3 m-3" style="width: 18rem;">
                       <div class="card-header">${data.displayName}</div>
                       <div class="card-body">
                           <h6 class="card-subtitle mb-2 text-muted">${data.symbol}</h6>
-                          <p class="card-text">Current Price: ${data.bid}</p>
+                          <p class="card-text">Current Price: ${data.bid}$</p>
                           <p class="card-text">Day Range: ${data.regularMarketDayRange}</p>
+                          <p class="card-text">Day Change: ${data.regularMarketChangePercent}%</p>
                       </div>
-                  </div>`)
+                      <button class="btn btn-danger remove-stock-btn">remove</button>
+                  </div>`);
+            $('.remove-stock-btn').on('click', removeStock);
+
+            // save changes to local storage
+            savePortfolio();
             $(this).dialog("close");
           },
           Cancel: function () {
@@ -120,35 +134,73 @@ let createModal = (event) => {
     })
 
   })
-
-
+  savePortfolio();
 }
 
+// deletes selected watchlist
 let deleteWatchList = (event) => {
-  console.log(event);
+  $(`.${event.currentTarget.dataset.delete}-delete`).remove();
+  savePortfolio();
 }
 
-// DO NOT ALLOW MORE THAN 5 WATCHLISTS
+// removes selected stock from watchlist
+let removeStock = (event) => {
+  event.currentTarget.offsetParent.remove();
+  savePortfolio();
+}
+
+// save the watchlists html to localstorage
+let savePortfolio = () => {
+  console.log($('#watchlists').html())
+  localStorage.setItem('portfolio', JSON.stringify($('#watchlists').html()));
+}
+
+// grab portfolio data from localstorage on page load, set buttons on html
+let getPortfolio = () => {
+  $('#watchlists').html(JSON.parse(localStorage.getItem('portfolio')));
+  $('.delete-watchlist').on('click', deleteWatchList);
+  $('.remove-stock-btn').on('click', removeStock);
+  console.log("HELLO" + $('#watchlists').children().html())
+}
+
+// creates a new watchlist, the user can create a max of 5 
 let createNewWatchlist = () => {
   modalEl.empty();
-  modalEl.append(`<input type='text' class='get-name'>`);
+  modalEl.append(`<input type='text' class='get-name' maxlength='20'>`);
   let title = 'New WatchList';
 
 
-  // if no watchlists
+  // user adds a stock before creating a watchlist change prompt title
   if (watchListsEl.children().length == 0) {
-    title = 'First Create A WatchList';
-    console.log(title);
-
-  }
-
-  if (watchListsEl.children().length !== 0) {
-    console.log("HERE " + watchListsEl.children()[0].dataset)
+    title = 'Create A WatchList';
   }
 
 
+  
+
+  // if the user has created 5 watchlists prompt them with the info
+  if (watchListsEl.children().length == 5) {
+    modalEl.empty();
+    $(function () {
+      modalEl.dialog({
+        position: { my: 'center', at: 'top+80px', of: $('#watchlists') },
+        title: 'Max of 5 watchlists',
+        resizable: false,
+        height: "15vh",
+        width: '20vw',
+        modal: true,
+        buttons: {
+          'Close': function () { $(this).dialog('close') }
+        }
+      })
+    })
+    return;
+  }
+
+  // prompt the user to create the watchlist and add it to the watchlists area
   $(function () {
     modalEl.dialog({
+      position: { my: 'center', at: 'top+80px', of: $('#watchlists') },
       dialogClass: 'no-close',
       title: title,
       resizable: false,
@@ -159,23 +211,43 @@ let createNewWatchlist = () => {
         "Add": function () {
           let name = $('.get-name').val();
           if (name == "") { $(this).dialog('close'); $('.get-name').text(""); return }
-          console.log(name);
-          let newWatchListEl = $('<div>').attr(`data-name`, name).addClass('watchlist').append(`
-                      <button class="btn btn-primary col-12" type="button" data-bs-toggle="collapse"
-                      data-bs-target="#collapse${name}" aria-expanded="false" aria-controls="collapseExample">
+          // checking for watchlist with same name
+          if (watchListsEl.children().length > 0) {
+            for (let i = 0; i < watchListsEl.children().length; i++) {
+              if ($('.get-name').val() == watchListsEl.children()[i].dataset.name) {
+                modalEl.empty();
+                $(function () {
+                  modalEl.dialog({
+                    position: { my: 'center', at: 'top+80px', of: $('#watchlists') },
+                    title: 'Name Taken',
+                    resizable: false,
+                    height: "15vh",
+                    width: '20vw',
+                    modal: true,
+                    buttons: {
+                      'Close': function () { $(this).dialog('close') }
+                    }
+                  })
+                })
+                return;
+              }
+            }
+          }
+
+          let newWatchListEl = $('<div>').attr(`data-name`, name).addClass(`${name}-delete watchlist mb-3`).append(`
+                      <button class="btn watchlist-btn col-12" type="button" data-bs-toggle="collapse"
+                      data-bs-target="#collapse${name}" aria-expanded="false" aria-controls="collapseExample" style="background-color: var(--skyblue)">
                       Show ${name} WatchList
                       </button>
-                      <div class="collapse" id="collapse${name}">
+                      <div class="collapse inner-watchlist" id="collapse${name}">
                           <div class="row card-body ${name}-watchlist">
 
                           </div>
-                          <button class="btn btn-danger col-12 delete-${name}">Delete Watchlist</button>
+                          <button data-delete="${name}" class="btn btn-danger col-12 delete-watchlist">Delete Watchlist</button>
                       </div>
                   `);
-          console.log(newWatchListEl);
           watchListsEl.append(newWatchListEl);
-          $(`delete-${name}`).on('click', deleteWatchList)
-          //localStorage.setItem('watchlists', JSON.stringify(watchListsEl))  
+          $('.delete-watchlist').on('click', deleteWatchList);
           $(this).dialog("close");
         },
         Cancel: function () {
@@ -189,47 +261,49 @@ let createNewWatchlist = () => {
 
 
 
-// auto complete function for search
-const autoCompleteSearch = (event) => {
-  let availableTags = [];
-  if (regEx.test(event.originalEvent.key) && event.originalEvent.key != 'Backspace') {
-    query += event.originalEvent.key;
-  } else if (event.originalEvent.key == 'Backspace' || event.originalEvent.key == 'Delete') {
-    let newStringArr = query.split('');
-    newStringArr.pop();
-    query = newStringArr.join('');
-  }
-  console.log(query);
+// // auto complete function for search
+// const autoCompleteSearch = (event) => {
+//   let availableTags = [];
+//   if (regEx.test(event.originalEvent.key) && event.originalEvent.key != 'Backspace') {
+//     query += event.originalEvent.key;
+//   } else if (event.originalEvent.key == 'Backspace' || event.originalEvent.key == 'Delete') {
+//     let newStringArr = query.split('');
+//     newStringArr.pop();
+//     query = newStringArr.join('');
+//   }
+//   console.log(query);
 
-  let url = `https://yfapi.net/v6/finance/autocomplete/?lang=en&query=${query}`
+//   let url = `https://yfapi.net/v6/finance/autocomplete/?lang=en&query=${query}`
 
-  fetch(url, options).then(function (response) {
-    return response.json();
-  }).then(function (data) {
-    console.log(data.ResultSet.Result);
-    for (let i = 0; i < data.ResultSet.Result.length; i++) {
-      console.log(data.ResultSet.Result[i].name);
-      let newSelectName = data.ResultSet.Result[i].name;
-      let newSelectTicker = data.ResultSet.Result[i].symbol;
-      if (availableTags.length < 6) {
-        availableTags.push(`${newSelectTicker}: ${newSelectName}`)
-      }
-    }
-    console.log(availableTags);
-  }).then(function () {
-    $("#stockSearch").autocomplete({
-      source: availableTags
-    });
-  });
-}
+//   fetch(url, options).then(function (response) {
+//     return response.json();
+//   }).then(function (data) {
+//     console.log(data.ResultSet.Result);
+//     for (let i = 0; i < data.ResultSet.Result.length; i++) {
+//       console.log(data.ResultSet.Result[i].name);
+//       let newSelectName = data.ResultSet.Result[i].name;
+//       let newSelectTicker = data.ResultSet.Result[i].symbol;
+//       if (availableTags.length < 6) {
+//         availableTags.push(`${newSelectTicker}: ${newSelectName}`)
+//       }
+//     }
+//     console.log(availableTags);
+//   }).then(function () {
+//     $("#stockSearch").autocomplete({
+//       source: availableTags
+//     });
+//   });
+// }
+
 
 
 // Event Listeners
 
 newWatchlistBtnEl.on('click', createNewWatchlist);
-stockSearchEl.on('keyup', autoCompleteSearch);
+//stockSearchEl.on('keydown', autoCompleteSearch);
 searchBtnEl.on('click', createModal);
 
+getPortfolio();
 
 //_____________________________________________________________________________________________________________________________________________
 // ALTHEA'S CODE (NERVOUS)
@@ -237,57 +311,58 @@ searchBtnEl.on('click', createModal);
 // Use Fetch API to GET data from OpenWeather API
 function getWeatherData() {
   let coordinates = "";
-  const APIKEY = '8cd7970543abb6bc1241aa086789ff58'; 
+  const APIKEY = '8cd7970543abb6bc1241aa086789ff58';
 
   // to be able to get the current browser location
-if (navigator.geolocation) {
-  navigator.geolocation.getCurrentPosition((position) => {
-  	 coordinates = `lat=${position.coords.latitude}&lon=${position.coords.longitude}`;
-     console.log(typeof coordinates);
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition((position) => {
+      coordinates = `lat=${position.coords.latitude}&lon=${position.coords.longitude}`;
+      console.log(typeof coordinates);
 
-     let URL = `https://api.openweathermap.org/data/2.5/onecall?${coordinates}&units=metric&appid=${APIKEY}`;
-     let nameURL = `http://api.openweathermap.org/geo/1.0/reverse?${coordinates}&appid=${APIKEY}`;
+      let URL = `https://api.openweathermap.org/data/2.5/onecall?${coordinates}&units=metric&appid=${APIKEY}`;
+      let nameURL = `http://api.openweathermap.org/geo/1.0/reverse?${coordinates}&appid=${APIKEY}`;
 
 
-     fetch(URL).then(function(response){
-      return response.json()
-    }).then(function(data){
-      fetch(nameURL).then(function(response){
+      fetch(URL).then(function (response) {
         return response.json()
-      }).then(function(info){
-        console.log(data);
-        console.log(info);
-        renderData(data.current, info[0].name);
+      }).then(function (data) {
+        fetch(nameURL).then(function (response) {
+          return response.json()
+        }).then(function (info) {
+          console.log(data);
+          console.log(info);
+          renderData(data.current, info[0].name);
+        })
       })
     })
-  })
-} else {
-	console.log('unable to retrieve location from browser')
-}}
+  } else {
+    console.log('unable to retrieve location from browser')
+  }
+}
 getWeatherData();
 
 
 
 // Get data info to post on the frontend
 let renderData = (weather, cityName) => {
- console.log(weather, cityName);
-//  These items exist
-const myWeather = document.getElementsByClassName('weather')[0];
+  console.log(weather, cityName);
+  //  These items exist
+  const myWeather = document.getElementsByClassName('weather')[0];
 
-// These items do not exist yet
- const currentLocation = document.createElement("div");
+  // These items do not exist yet
+  const currentLocation = document.createElement("div");
   currentLocation.innerHTML = cityName;
- const currentTemp = document.createElement("div");
- console.log(weather);
+  const currentTemp = document.createElement("div");
+  console.log(weather);
   currentTemp.innerHTML = Math.round(weather.temp) + "°C";
- 
- const foreCast = document.createElement("div");
- foreCast.innerHTML = (weather.weather[0].description);
 
-//  These will make my items exist
-currentLocation.appendChild(foreCast);
- currentLocation.appendChild(currentTemp);
- myWeather.appendChild(currentLocation);
+  const foreCast = document.createElement("div");
+  foreCast.innerHTML = (weather.weather[0].description);
+
+  //  These will make my items exist
+  currentLocation.appendChild(foreCast);
+  currentLocation.appendChild(currentTemp);
+  myWeather.appendChild(currentLocation);
 }
 
 
@@ -351,13 +426,13 @@ function CHANGETHEME() {
   } else if (themecount == 2) {
     document.documentElement.style.setProperty('--slate', 'rgb(100 116 139)');
     document.documentElement.style.setProperty('--skyblue', 'rgb(14 165 233)');
-    document.documentElement.style.setProperty('--emerald', 'rgb(16 185 129)'); 
+    document.documentElement.style.setProperty('--emerald', 'rgb(16 185 129)');
     $('body').css('font-family', 'Quicksand');
   } else if (themecount == 3) {
     themecount = 0;
     document.documentElement.style.setProperty('--slate', '#ef7674');
     document.documentElement.style.setProperty('--skyblue', '#EC5766');
-    document.documentElement.style.setProperty('--emerald', '#DA344D'); 
+    document.documentElement.style.setProperty('--emerald', '#DA344D');
     $('body').css('font-family', 'Indie Flower');
   }
 }
