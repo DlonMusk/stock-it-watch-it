@@ -34,7 +34,7 @@
     - Bootstrap
 
 ## References
-![Demo Site](./assets/Images/)
+![Demo Site](./Images/StockIt%26watchIt.bmp)
 
 ## Deployed Site Link/ Github Pages
  https://dlonmusk.github.io/stock-it-watch-it/
