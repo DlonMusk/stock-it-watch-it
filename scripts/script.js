@@ -80,11 +80,11 @@ let createModal = (event) => {
                   $(`.${watchlistName}-watchlist`).append(
                     `<div class="card col-3 m-3" style="width: 18rem;">
                                   <div class="card-header">${data.displayName}</div>
-                                  <div class="card-body">
+                                  <div data-ticker="${data.symbol}" class="card-body">
                                       <h6 class="card-subtitle mb-2 text-muted">${data.symbol}</h6>
                                       <p class="card-text">Current Price: ${data.bid}$</p>
                                       <p class="card-text">Day Range: ${data.regularMarketDayRange}</p>
-                                      <p class="card-text">Day Change: ${data.regularMarketChangePercent}%</p>
+                                      <p class="card-text">Day Change: ${data.regularMarketChangePercent.toFixed(2)}%</p>
                                   </div>
                                   <button class="btn btn-danger remove-stock-btn">remove</button>
                               </div>`);
@@ -112,11 +112,11 @@ let createModal = (event) => {
             $(`.${watchlistName}-watchlist`).append(
               `<div class="card col-3 m-3" style="width: 18rem;">
                       <div class="card-header">${data.displayName}</div>
-                      <div class="card-body">
+                      <div data-ticker="${data.symbol}" class="card-body">
                           <h6 class="card-subtitle mb-2 text-muted">${data.symbol}</h6>
                           <p class="card-text">Current Price: ${data.bid}$</p>
                           <p class="card-text">Day Range: ${data.regularMarketDayRange}</p>
-                          <p class="card-text">Day Change: ${data.regularMarketChangePercent}%</p>
+                          <p class="card-text">Day Change: ${data.regularMarketChangePercent.toFixed(2)}%</p>
                       </div>
                       <button class="btn btn-danger remove-stock-btn">remove</button>
                   </div>`);
@@ -151,7 +151,6 @@ let removeStock = (event) => {
 
 // save the watchlists html to localstorage
 let savePortfolio = () => {
-  console.log($('#watchlists').html())
   localStorage.setItem('portfolio', JSON.stringify($('#watchlists').html()));
 }
 
@@ -160,7 +159,7 @@ let getPortfolio = () => {
   $('#watchlists').html(JSON.parse(localStorage.getItem('portfolio')));
   $('.delete-watchlist').on('click', deleteWatchList);
   $('.remove-stock-btn').on('click', removeStock);
-  console.log("HELLO" + $('#watchlists').children().html())
+  updateWatchlists();
 }
 
 // creates a new watchlist, the user can create a max of 5 
@@ -241,7 +240,6 @@ let createNewWatchlist = () => {
                       </button>
                       <div class="collapse inner-watchlist" id="collapse${name}">
                           <div class="row card-body ${name}-watchlist">
-
                           </div>
                           <button data-delete="${name}" class="btn btn-danger col-12 delete-watchlist">Delete Watchlist</button>
                       </div>
@@ -258,6 +256,32 @@ let createNewWatchlist = () => {
   })
 
 }
+
+let updateWatchlists = () => {
+  let watchlists = $('.inner-watchlist');
+
+  for(let i = 0; i < watchlists.length; i++){
+    let tickers = watchlists[i].children[0].children;
+    for(let j = 0; j < tickers.length; j++){
+
+      let symbol = tickers[j].children[1].dataset.ticker
+
+      fetch(`https://yfapi.net/v6/finance/quote?region=US&lang=en&symbols=${symbol}`, options).then(function(response){
+        return response.json();
+      }).then(function(data){
+
+        data = data.quoteResponse.result[0];
+        tickers[j].children[1].innerHTML = `
+        <h6 class="card-subtitle mb-2 text-muted">${data.symbol}</h6>
+        <p class="card-text">Current Price: ${data.bid}$</p>
+        <p class="card-text">Day Range: ${data.regularMarketDayRange}</p>
+        <p class="card-text">Day Change: ${data.regularMarketChangePercent.toFixed(2)}%</p>`;
+
+      })
+    }
+  }
+}
+
 
 
 
@@ -401,7 +425,6 @@ function GRABNEWS() {
         var newsType = news[i].type;
         $(".currentNews").append(
           `<div class="newscard mt-3">
-
                <div target="_blank" href="${newsURL}" class="imagePreview"><img src="${imageURL}" class="newsImage"></div>
                <div class="titlesearch lead"><a class="link" href="${newsURL}">${newsTitle}</a> <hr></div>
                <div class="textsearch"> ${newsSource} | ${newsDate} </div>
@@ -439,8 +462,3 @@ function CHANGETHEME() {
 
 $('#theme').on("click", CHANGETHEME)
 //____________________________________________________________________________________________________________________________________________ 
-
-
-
-
-

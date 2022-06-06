@@ -18,7 +18,7 @@ body, div, header, section, aside {
     flex: 1 0 auto;
     flex-wrap: wrap;
     overflow-y: scroll;
-    max-height: 700px;
+    max-height: 80vh;
     min-width: 300px;
     border: 3px solid var(--slate);
     background-color: var(--slate);
